@@ -38,3 +38,6 @@ coverage/
 build/
 out/
 .vercel/
+
+# Archived Assets
+src/assets/archive/
