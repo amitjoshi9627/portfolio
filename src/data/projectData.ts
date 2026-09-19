@@ -117,7 +117,7 @@ export const PROJECTS: Project[] = [
     id: "spool",
     index: "03",
     title: "Spool",
-    subtitle: "Natural Language to Optimizatoin Code",
+    subtitle: "Natural Language to Optimization Code",
     kind: "professional",
     cut: "ZOOM",
     logline:

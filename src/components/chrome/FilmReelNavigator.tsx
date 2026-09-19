@@ -24,7 +24,7 @@ export function FilmReelNavigator({ activeScene }: FilmReelNavigatorProps) {
 
   return (
     <motion.div
-      className="pointer-events-none fixed bottom-6 left-6 z-[130]"
+      className="pointer-events-none fixed bottom-6 left-6 z-[130] hidden sm:block"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}

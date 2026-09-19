@@ -139,16 +139,13 @@ export function ProjectPanel({
                 className="mt-[2vh] grid grid-cols-2 gap-4 border-y border-forest/15 py-[1.5vh] sm:grid-cols-4 sm:gap-x-6"
               >
                 {project.metrics.map((m) => (
-                  <div key={m.label} className="min-w-0">
-                    <dt className="sr-only">{m.label}</dt>
-                    <dd>
-                      <span className="block font-display font-bold text-base sm:text-lg lg:text-xl leading-snug text-parchment tracking-tight">
-                        {m.value}
-                      </span>
-                      <span className="mt-1 block font-mono text-[10px] font-semibold uppercase tracking-wider text-parchment-dim/80 leading-tight">
-                        {m.label}
-                      </span>
+                  <div key={m.label} className="min-w-0 flex flex-col">
+                    <dd className="order-1 block font-display font-bold text-base sm:text-lg lg:text-xl leading-snug text-parchment tracking-tight">
+                      {m.value}
                     </dd>
+                    <dt className="order-2 mt-1 block font-mono text-[10px] font-semibold uppercase tracking-wider text-parchment-dim/80 leading-tight">
+                      {m.label}
+                    </dt>
                   </div>
                 ))}
               </motion.dl>

@@ -31,8 +31,8 @@ export function useActiveScene(ids: string[]): string {
       },
       {
         root: null,
-        // Trigger when the element reaches 45% down from the top of the viewport
-        rootMargin: "-45% 0px -54% 0px", 
+        // Trigger when the element reaches 25% down from the top of the viewport
+        rootMargin: "-25% 0px -65% 0px", 
         threshold: 0
       }
     );

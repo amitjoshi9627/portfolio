@@ -138,8 +138,8 @@ export function Scene04RawFootage({
   });
 
   const still = reduced;
-  const cols = mobile ? 4 : lowPower || reduced ? 5 : 7;
-  const rows = mobile ? 4 : 5;
+  const cols = mobile ? 3 : lowPower || reduced ? 5 : 7;
+  const rows = mobile ? 3 : 5;
   const total = cols * rows;
   const signalIndex = Math.floor(total / 2);
 
@@ -169,7 +169,7 @@ export function Scene04RawFootage({
             style={{ opacity: gridFade }}
           >
             <Slate index="04" title="RAW FOOTAGE" note="THE ARCHIVE" />
-            <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-1">
+            <ul className="mt-4 flex flex-wrap gap-x-2 sm:gap-x-4 gap-y-1 pr-4 sm:pr-0">
               {ARCHIVE_LABELS.map((l) => (
                 <li
                   key={l}

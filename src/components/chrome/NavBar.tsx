@@ -147,7 +147,7 @@ export function NavBar({ activeScene, soundOn, onToggleSound }: NavBarProps) {
                 style={{ background: isLanding ? "linear-gradient(to right, rgba(255,255,255,0.7), transparent)" : "linear-gradient(to right, rgba(22,88,59,0.7), transparent)" }}
               />
             </div>
-            <span className={`label mt-1.5 block font-bold text-[8px] sm:text-[10px] tracking-[0.1em] sm:tracking-[0.15em] ${isLanding ? 'text-white/70' : 'text-parchment-dim'}`}>ANIMATOR&rsquo;S DESK</span>
+            <span className={`label mt-1.5 hidden sm:block font-bold text-[8px] sm:text-[10px] tracking-[0.1em] sm:tracking-[0.15em] ${isLanding ? 'text-white/70' : 'text-parchment-dim'}`}>ANIMATOR&rsquo;S DESK</span>
           </button>
 
           <div className="ml-auto flex items-center gap-2.5 sm:gap-3.5">
@@ -282,7 +282,7 @@ export function NavBar({ activeScene, soundOn, onToggleSound }: NavBarProps) {
               {isMobileMenu ? (
                 <div className="pointer-events-auto flex-1 overflow-y-auto py-4">
                   {/* Mobile fast-nav pills */}
-                  <div className="flex gap-2 mb-6 flex-wrap">
+                  <div className="flex gap-1.5 sm:gap-2 mb-6 flex-wrap">
                     {[
                       { id: "director", label: "Resume" },
                       { id: "edit", label: "Work" },
@@ -293,7 +293,7 @@ export function NavBar({ activeScene, soundOn, onToggleSound }: NavBarProps) {
                         key={item.id}
                         type="button"
                         onClick={() => go(item.id)}
-                        className="rounded-full border border-sunset/30 bg-sunset/10 px-4 py-1.5 font-mono text-[11px] font-bold tracking-widest text-sunset-glow transition-all hover:bg-sunset/20 active:scale-95"
+                        className="rounded-full border border-sunset/30 bg-sunset/10 px-3 py-1 sm:px-4 sm:py-1.5 font-mono text-[10px] sm:text-[11px] font-bold tracking-widest text-sunset-glow transition-all hover:bg-sunset/20 active:scale-95"
                       >
                         {item.label.toUpperCase()}
                       </button>
@@ -503,7 +503,7 @@ export function NavBar({ activeScene, soundOn, onToggleSound }: NavBarProps) {
               )}
 
               {/* Bottom Footer Info Bar with Fast Jumps */}
-              <div className="flex shrink-0 items-center justify-between border-t border-white/10 pt-4 pointer-events-auto z-20">
+              <div className="flex shrink-0 flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-white/10 pt-4 pointer-events-auto z-20">
                 <div className="flex items-center gap-4 sm:gap-6">
                   <motion.button
                     whileHover={{ scale: 1.02 }}
