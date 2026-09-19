@@ -68,7 +68,7 @@ function ChapterHead({
         <span className="h-[2px] w-8 rounded-full" style={{ background: titleColor, opacity: 0.7 }} />
         <span className="label font-bold text-parchment tracking-wider">{kicker}</span>
       </div>
-      <h3 className="mt-[2vh] font-display font-bold text-[clamp(2.4rem,8.1vmin,6rem)] leading-[0.92] tracking-[-0.02em] text-parchment [text-shadow:0_1px_2px_rgba(0,0,0,0.4)]">
+      <h3 className="mt-[2vh] font-display font-bold text-[clamp(1.8rem,7vmin,5rem)] leading-[0.92] tracking-[-0.02em] text-parchment [text-shadow:0_1px_2px_rgba(0,0,0,0.4)]">
         {heading}
       </h3>
       {statement && (
@@ -112,13 +112,17 @@ function TravelFrame({
   const scale = useTransform(p, [mark.at - 0.08, mark.at + 0.08], reduced ? [1, 1] : [0.75, 1.05]);
   const y = useTransform(p, [mark.at - 0.08, mark.at + 0.08], reduced ? ["0%", "0%"] : ["14%", "0%"]);
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const frameWidth = isMobile ? Math.max(45, mark.w * 1.5) : mark.w;
+  const frameX = isMobile ? Math.min(mark.x, 100 - frameWidth - 4) : mark.x;
+
   return (
     <motion.div
       className="absolute"
       style={{
-        left: `${mark.x}%`,
+        left: `${frameX}%`,
         top: `${mark.y}%`,
-        width: `${mark.w}%`,
+        width: `${frameWidth}%`,
         opacity,
         scale,
         y,
@@ -343,7 +347,7 @@ function PhotoFrameItem({ slot, i, scrollYProgress, onOpen, total }: { slot: any
 
   return (
     <motion.li 
-      className="w-[38vw] shrink-0 sm:w-[22vw] lg:w-[16vw] origin-center"
+      className="w-[65vw] shrink-0 sm:w-[22vw] lg:w-[16vw] origin-center"
       style={{ scale, opacity, zIndex, filter }}
     >
       <div className="aspect-[4/3] w-full rounded-md shadow-2xl p-1.5 bg-white transition-shadow duration-500 hover:shadow-3xl">
@@ -541,7 +545,7 @@ function ChapterCuriosity() {
           An open sketchbook. It is meant to keep changing.
         </p>
 
-        <ul className="mt-[6vh] grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4">
+        <ul className="mt-[6vh] grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
           {CURIOSITY_TILES.map((tile, i) => (
             <motion.li
               key={tile.id}

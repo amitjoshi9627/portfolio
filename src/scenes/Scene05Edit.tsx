@@ -110,7 +110,7 @@ export function Scene05Edit({ reduced, mobile, onCut }: Props) {
       <SceneSection id="edit" label="The animation desk — selected work" className="px-0 py-[10vh] bg-ink-mid">
         <div className="px-4">
           <Slate index="05" title="THE EDIT" note="SELECTED WORKS" />
-          <h2 className="mt-[3vh] font-display font-bold text-[clamp(2.4rem,5.4vmin,4rem)] leading-[0.95] text-parchment">
+          <h2 className="mt-[3vh] font-display font-bold text-[clamp(1.8rem,5.4vmin,4rem)] leading-[0.95] text-parchment">
             THE GALLERY
           </h2>
           <p className="mt-[2vh] max-w-sm text-[clamp(14px,1.5vmin,16px)] font-medium leading-relaxed text-parchment-dim">
@@ -226,7 +226,7 @@ function PersonalDivider() {
   return (
     <div className="border-y-2 border-forest/10 bg-[radial-gradient(ellipse_at_center,rgba(245,215,110,0.1)_0%,transparent_100%)] px-4 py-[5vh]">
       <span className="label text-sunset font-bold">SCENE CHANGE</span>
-      <h3 className="mt-[1.5vh] font-display font-bold text-[clamp(1.8rem,3.5vmin,2.6rem)] leading-[1] text-parchment">
+      <h3 className="mt-[1.5vh] font-display font-bold text-[clamp(1.6rem,3.5vmin,2.6rem)] leading-[1] text-parchment">
         The worlds I paint after hours
       </h3>
       <p className="mt-[1.5vh] text-[clamp(14px,1.5vmin,16px)] font-medium leading-relaxed text-parchment-dim">

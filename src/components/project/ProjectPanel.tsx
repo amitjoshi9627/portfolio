@@ -104,7 +104,7 @@ export function ProjectPanel({
                 hidden: { opacity: 0, y: 18 },
                 show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE_OUT } },
               }}
-              className="font-display font-bold text-[clamp(2rem,6.0vmin,4.5rem)] leading-[0.92] tracking-[-0.02em] text-parchment uppercase"
+              className="font-display font-bold text-[clamp(1.7rem,6.0vmin,4.5rem)] leading-[0.92] tracking-[-0.02em] text-parchment uppercase"
             >
               {project.title.toUpperCase()}
             </motion.h3>
@@ -220,7 +220,7 @@ export function ProjectPanel({
           {/* visual column */}
           <div className="relative" data-cursor={noteOpen ? "NOTE" : "VIEW"}>
             <motion.div
-              className="relative flex h-[46svh] min-h-[340px] sm:min-h-[360px] max-h-[480px] w-full flex-col overflow-hidden rounded-xl border-2 p-3 sm:p-4 lg:p-4.5 lg:h-[48svh] lg:min-h-[380px]"
+              className="relative flex h-[46svh] min-h-[260px] sm:min-h-[360px] max-h-[480px] w-full flex-col overflow-hidden rounded-xl border-2 p-3 sm:p-4 lg:p-4.5 lg:h-[48svh] lg:min-h-[380px]"
               style={{ borderColor: `${accent}28`, backgroundColor: "var(--color-ink-mid)" }}
               animate={{
                 scale: noteOpen && !reduced ? 0.965 : 1,

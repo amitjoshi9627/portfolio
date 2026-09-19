@@ -48,8 +48,8 @@ export function NavBar({ activeScene, soundOn, onToggleSound }: NavBarProps) {
     const isMobile = window.innerWidth < 768;
     const isShort = window.innerHeight < 680;
     return {
-      radiusX: isMobile ? (isShort ? 120 : 145) : (isShort ? 300 : 375),
-      radiusY: isMobile ? (isShort ? 170 : 220) : (isShort ? 190 : 255),
+      radiusX: isMobile ? (isShort ? 80 : 100) : (isShort ? 300 : 375),
+      radiusY: isMobile ? (isShort ? 120 : 160) : (isShort ? 190 : 255),
     };
   }, [open]);
 
@@ -329,7 +329,7 @@ export function NavBar({ activeScene, soundOn, onToggleSound }: NavBarProps) {
                         onClick={() => go(item.id)}
                         onMouseEnter={() => setHoveredScene(item)}
                         data-cursor="ENTER"
-                        className={`pointer-events-auto absolute group flex flex-col justify-between rounded-xl p-3 sm:p-4 text-left border backdrop-blur-2xl w-32 h-24 sm:w-44 sm:h-28 transition-colors duration-200 ${
+                        className={`pointer-events-auto absolute group flex flex-col justify-between rounded-xl p-2.5 sm:p-4 text-left border backdrop-blur-2xl w-28 h-20 sm:w-44 sm:h-28 transition-colors duration-200 ${
                           isHovered
                             ? "bg-[#16201b]/95 border-sunset/60 shadow-[0_12px_36px_rgba(212,122,67,0.35)] z-30"
                             : isCurrent
