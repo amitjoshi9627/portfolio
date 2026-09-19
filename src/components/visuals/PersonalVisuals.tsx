@@ -121,13 +121,13 @@ export function SilaVisual({ active, reduced, rewind }: VisualProps) {
         })}
 
         {/* QUALITY SIGNALS Annotation */}
-        <div className="absolute bottom-1 right-1 bg-white/80 backdrop-blur-md border border-paper/20 px-1.5 py-1 rounded flex items-center gap-1.5 shadow-sm">
+        <div className="absolute top-1 right-1 bg-white/80 backdrop-blur-md border border-paper/20 px-1.5 py-1 rounded hidden sm:flex items-center gap-1.5 shadow-sm">
           <span className="text-[7px] sm:text-[8px] font-bold text-paper/70 tracking-wider">QUALITY SIGNALS</span>
           <span className="text-[7.5px] sm:text-[8.5px] text-paper/70 font-serif italic">blur · exposure</span>
         </div>
       </div>
 
-      <div className="flex items-start sm:items-center justify-between shrink-0">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between shrink-0 gap-1.5">
         <div className="flex flex-wrap items-center gap-1.5">
           <Chip accent="#C98A3C" muted={step < 1}>
             MULTIMODAL INGESTION
@@ -553,17 +553,19 @@ export function FeedShiftVisual({ active, reduced, rewind }: VisualProps) {
       </div>
 
       {/* Footer */}
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 shrink-0">
-        {SIGNALS.map((s) => (
-          <span
-            key={s.key}
-            className="label flex items-center gap-1.5"
-            style={{ color: s.key === "QUALITY" ? "#B4462F" : "#6B7F5E" }}
-          >
-            <s.icon size={11} strokeWidth={1.6} />
-            {s.key}
-          </span>
-        ))}
+      <div className="flex flex-wrap items-center justify-between sm:justify-start gap-x-2 sm:gap-x-3 gap-y-1.5 shrink-0">
+        <div className="flex flex-wrap items-center gap-x-2 sm:gap-x-3 gap-y-1">
+          {SIGNALS.map((s) => (
+            <span
+              key={s.key}
+              className="label flex items-center gap-1.5 text-[8.5px] sm:text-[9.5px]"
+              style={{ color: s.key === "QUALITY" ? "#B4462F" : "#6B7F5E" }}
+            >
+              <s.icon size={11} strokeWidth={1.6} />
+              {s.key}
+            </span>
+          ))}
+        </div>
         <AnimatePresence>
           {step >= 3 && (
             <motion.span
@@ -571,7 +573,7 @@ export function FeedShiftVisual({ active, reduced, rewind }: VisualProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="label text-[#6B7F5E] ml-auto shrink-0"
+              className="label text-[#6B7F5E] text-[8.5px] sm:text-[9.5px] sm:ml-auto shrink-0 w-full text-left sm:w-auto mt-1 sm:mt-0"
             >
               RELEVANCE OVER RECENCY
             </motion.span>
