@@ -106,7 +106,7 @@ export function Scene02Director({ reduced }: { reduced: boolean }) {
               transition={{ duration: 0.9, ease: EASE_OUT }}
             >
               <div className="flex items-baseline gap-4">
-                <span className="block font-display font-bold text-[clamp(6rem,14vmin,11rem)] leading-[0.8] text-parchment [text-shadow:0_2px_4px_rgba(0,0,0,0.15)]">
+                <span className="block font-display font-bold text-[clamp(5rem,12vmin,11rem)] leading-[0.8] text-parchment [text-shadow:0_2px_4px_rgba(0,0,0,0.15)]">
                   {PROFILE.years}+
                 </span>
                 <div>

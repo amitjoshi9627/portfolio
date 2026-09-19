@@ -220,7 +220,7 @@ export function ProjectPanel({
           {/* visual column */}
           <div className="relative" data-cursor={noteOpen ? "NOTE" : "VIEW"}>
             <motion.div
-              className="relative flex h-[46svh] min-h-[260px] sm:min-h-[360px] max-h-[480px] w-full flex-col overflow-hidden rounded-xl border-2 p-3 sm:p-4 lg:p-4.5 lg:h-[48svh] lg:min-h-[380px]"
+              className="relative flex h-[42svh] min-h-[200px] sm:min-h-[320px] max-h-[480px] w-full flex-col overflow-hidden rounded-xl border-2 p-3 sm:p-4 lg:p-4.5 lg:h-[48svh] lg:min-h-[380px]"
               style={{ borderColor: `${accent}28`, backgroundColor: "var(--color-ink-mid)" }}
               animate={{
                 scale: noteOpen && !reduced ? 0.965 : 1,

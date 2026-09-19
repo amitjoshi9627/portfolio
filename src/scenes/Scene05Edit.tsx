@@ -108,7 +108,7 @@ export function Scene05Edit({ reduced, mobile, onCut }: Props) {
   if (mobile) {
     return (
       <SceneSection id="edit" label="The animation desk — selected work" className="px-0 py-[10vh] bg-ink-mid">
-        <div className="px-4">
+        <div className="px-4 pt-[calc(env(safe-area-inset-top)+60px)] sm:pt-0">
           <Slate index="05" title="THE EDIT" note="SELECTED WORKS" />
           <h2 className="mt-[3vh] font-display font-bold text-[clamp(1.8rem,5.4vmin,4rem)] leading-[0.95] text-parchment">
             THE GALLERY

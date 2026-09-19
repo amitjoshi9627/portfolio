@@ -57,7 +57,7 @@ export function Scene03Script({ reduced }: { reduced: boolean }) {
   const activeStage = SCRIPT_STAGES[activeIndex];
 
   return (
-    <SceneSection id="script" label="The storyboard" className="h-[200vh] sm:h-[400vh] bg-ink-mid">
+    <SceneSection id="script" label="The storyboard" className="h-[270vh] sm:h-[400vh] bg-ink-mid">
       <div ref={ref} className="absolute inset-0">
         <div className="sticky top-0 flex h-[100svh] items-center overflow-hidden px-4 sm:px-8 pt-[8svh] [@media(max-height:750px)]:overflow-y-auto [@media(max-height:750px)]:items-start [@media(max-height:750px)]:pt-[12svh] [@media(max-height:750px)]:pb-12">
           {/* plane 0 — warm sunlight wall */}
@@ -85,7 +85,41 @@ export function Scene03Script({ reduced }: { reduced: boolean }) {
                 Before the code, there is a sketch. A question becomes a shape, the shape becomes a system, and the system earns its way into production.
               </p>
 
-              {/* storyboard page stack */}
+              {/* Mobile: compact glyph card */}
+              <div className="relative mt-6 lg:hidden block w-full max-w-[200px]">
+                <div className="paper-texture bg-white/95 border border-forest/10 rounded-md overflow-hidden shadow-lg">
+                  <div className="flex items-center justify-between border-b border-forest/10 px-3 py-1.5 bg-white/50">
+                    <span className="label tracking-widest text-parchment-mist text-[9px]">STAGE</span>
+                    <span className="label text-forest font-bold text-[9px]">
+                      {String(activeIndex + 1).padStart(2, "0")}/{count}
+                    </span>
+                  </div>
+                  <div className="relative aspect-[4/3] w-full bg-[radial-gradient(ellipse_at_center,rgba(116,156,184,0.1)_0%,transparent_70%)]">
+                    <AnimatePresence mode="wait">
+                      <motion.svg
+                        key={activeIndex}
+                        viewBox="0 0 100 100"
+                        className="absolute inset-0 h-full w-full p-6"
+                        fill="none"
+                        stroke="#386641"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        initial="hidden"
+                        animate="show"
+                        exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.3 } }}
+                        aria-hidden
+                      >
+                        {GLYPHS[activeIndex].map((d, i) => (
+                          <motion.path key={d} d={d} custom={i} variants={drawStroke} />
+                        ))}
+                      </motion.svg>
+                    </AnimatePresence>
+                  </div>
+                </div>
+              </div>
+
+              {/* Desktop: storyboard page stack */}
               <div className="relative mt-6 hidden w-full max-w-[280px] 2xl:max-w-[320px] lg:block">
                 <motion.div
                   className="absolute inset-0 rotate-[-4deg] rounded-md border border-forest/20 bg-ink-rim/50 shadow-lg"
@@ -147,7 +181,7 @@ export function Scene03Script({ reduced }: { reduced: boolean }) {
                 </motion.div>
               </div>
 
-              <Annotation className="mt-8 hidden lg:block text-sunset" rotate={-3}>
+              <Annotation className="mt-8 block text-sunset text-[14px] lg:text-[17px]" rotate={-3}>
                 the code is just the final ink layer
               </Annotation>
             </motion.div>

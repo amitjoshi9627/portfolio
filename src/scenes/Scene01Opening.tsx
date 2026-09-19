@@ -114,7 +114,7 @@ export function Scene01Opening({ reduced, ready }: Props) {
   }));
 
   return (
-    <SceneSection id="opening" label="Opening credits" className="h-[180vh] sm:h-[300vh] bg-black">
+    <SceneSection id="opening" label="Opening credits" className="h-[240vh] sm:h-[300vh] bg-black">
       <div ref={ref} className="absolute inset-0">
         <div className="sticky top-0 h-[100svh] w-full overflow-hidden">
           {/* ── BACKGROUND IMAGE ─── */}

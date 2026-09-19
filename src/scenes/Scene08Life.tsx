@@ -106,15 +106,24 @@ function TravelFrame({
   reduced: boolean;
   onOpen: Open;
 }) {
+  // Reactive mobile detection — updates on orientation change
+  const [isMobileVp, setIsMobileVp] = useState(
+    typeof window !== 'undefined' ? window.innerWidth < 768 : false
+  );
+  useEffect(() => {
+    const check = () => setIsMobileVp(window.innerWidth < 768);
+    window.addEventListener('resize', check, { passive: true });
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
   // Frames fade in promptly as the road arrives, hold at full opacity through the long viewing pause (up to 0.90), and only fade as you scroll down to the next page
   const opacity = useTransform(p, [mark.at - 0.08, mark.at, 0.90, 0.99], [0, 1, 1, 0]);
   /* Frames rush toward the lens and settle completely into place by mark.at + 0.08 */
   const scale = useTransform(p, [mark.at - 0.08, mark.at + 0.08], reduced ? [1, 1] : [0.75, 1.05]);
   const y = useTransform(p, [mark.at - 0.08, mark.at + 0.08], reduced ? ["0%", "0%"] : ["14%", "0%"]);
 
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-  const frameWidth = isMobile ? Math.max(45, mark.w * 1.5) : mark.w;
-  const frameX = isMobile ? Math.min(mark.x, 100 - frameWidth - 4) : mark.x;
+  const frameWidth = isMobileVp ? Math.max(45, mark.w * 1.5) : mark.w;
+  const frameX = isMobileVp ? Math.min(mark.x, 100 - frameWidth - 4) : mark.x;
 
   return (
     <motion.div
@@ -193,7 +202,7 @@ function ChapterTravel({ reduced, onOpen }: { reduced: boolean; onOpen: Open }) 
         </div>
 
         <motion.div
-          className="pointer-events-none absolute inset-x-0 top-[8svh] px-4 sm:px-8 pl-[6%]"
+          className="pointer-events-none absolute inset-x-0 top-[calc(8svh+56px)] px-4 sm:px-8 pl-[6%]"
         >
           <ChapterHead {...chapter} statement={chapter.statement} className="mx-auto max-w-6xl translate-x-2 -translate-y-2" />
         </motion.div>
@@ -314,7 +323,7 @@ function ChapterPhotography({
           </motion.div>
         ) : null}
 
-        <div className="absolute inset-x-0 top-[18svh] sm:top-[12svh] px-4 sm:px-8">
+        <div className="absolute inset-x-0 top-[calc(10svh+56px)] sm:top-[12svh] px-4 sm:px-8">
           <ChapterHead {...chapter} statement={chapter.statement} className="mx-auto max-w-6xl" />
         </div>
 
@@ -555,7 +564,7 @@ function ChapterCuriosity() {
   const chapter = LIFE_CHAPTERS[3];
 
   return (
-    <div className="relative h-[150vh] bg-[#fdfbf7]">
+    <div className="relative h-[200vh] bg-[#fdfbf7]">
       <div className="sticky top-0 flex h-[100svh] flex-col justify-center overflow-hidden px-4 sm:px-8 pt-[8svh] [@media(max-height:750px)]:overflow-y-auto [@media(max-height:750px)]:justify-start [@media(max-height:750px)]:pt-[12svh] [@media(max-height:750px)]:pb-24">
         <div className="mx-auto w-full max-w-6xl py-[6vh]">
         <ChapterHead {...chapter} />
@@ -697,7 +706,7 @@ function Lightbox({ slot, onClose }: { slot: MediaSlot | null; onClose: () => vo
                 <>
                   <video
                     ref={videoRef}
-                    className="max-h-[85vh] max-w-[95vw] object-contain rounded-xl"
+                    className="max-h-[85svh] max-w-[95vw] object-contain rounded-xl"
                     src={slot.src}
                     poster={slot.poster}
                     autoPlay
@@ -728,7 +737,7 @@ function Lightbox({ slot, onClose }: { slot: MediaSlot | null; onClose: () => vo
                 <img
                   src={slot.src}
                   alt={slot.alt}
-                  className="max-h-[85vh] max-w-[95vw] object-contain rounded-xl"
+                  className="max-h-[85svh] max-w-[95vw] object-contain rounded-xl"
                 />
               )}
               

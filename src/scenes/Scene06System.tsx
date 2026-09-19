@@ -40,7 +40,7 @@ export function Scene06System({ reduced }: { reduced: boolean }) {
   return (
     <SceneSection id="system" label="The studio" className="h-[300vh] sm:h-[420vh] bg-ink-mid">
       <div ref={ref} className="absolute inset-0">
-        <div className="sticky top-0 flex h-[100svh] items-center overflow-hidden px-4 sm:px-8 bg-[radial-gradient(ellipse_at_center,rgba(253,251,247,0.8)_0%,transparent_100%)] pt-[8svh] [@media(max-height:750px)]:overflow-y-auto [@media(max-height:750px)]:items-start [@media(max-height:750px)]:pt-[12svh] [@media(max-height:750px)]:pb-24">
+        <div className="sticky top-0 flex h-[100svh] items-center overflow-hidden px-4 sm:px-8 bg-[radial-gradient(ellipse_at_center,rgba(253,251,247,0.8)_0%,transparent_100%)] pt-[calc(8svh+60px)] sm:pt-[8svh] [@media(max-height:750px)]:overflow-y-auto [@media(max-height:750px)]:items-start [@media(max-height:750px)]:pt-[calc(12svh+56px)] [@media(max-height:750px)]:pb-24">
           {/* framing marks that fly outward as the camera retreats */}
           <motion.div
             aria-hidden
@@ -128,14 +128,15 @@ export function Scene06System({ reduced }: { reduced: boolean }) {
               </div>
             </div>
 
-            {/* the spine */}
-            <ol className="mt-[3vh] grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-7 md:gap-2">
+            {/* the spine — horizontal scroll on mobile to preserve pipeline metaphor */}
+            <div className="mt-[3vh] -mx-4 sm:mx-0">
+              <ol className="flex gap-2 overflow-x-auto px-4 sm:px-0 pb-3 sm:pb-0 sm:grid sm:grid-cols-3 sm:gap-2 lg:grid-cols-7 lg:gap-2 scrollbar-hide" style={{ scrollSnapType: 'x mandatory' }}>
               {SYSTEM_STAGES.map((s, i) => {
                 const on = stage > i;
                 return (
-                  <li key={s.label} className="min-w-0">
+                  <li key={s.label} className="min-w-[42vw] sm:min-w-0 shrink-0 sm:shrink" style={{ scrollSnapAlign: 'start' }}>
                     <motion.div
-                      className="flex h-full flex-col justify-between border-2 rounded-xl p-3 bg-white/50"
+                      className="flex h-full flex-col justify-between border-2 rounded-xl p-3 bg-white/50 min-h-[80px]"
                       animate={{
                         borderColor: on ? "rgba(126,184,108,0.6)" : "rgba(126,184,108,0.1)",
                         backgroundColor: on ? "rgba(126,184,108,0.1)" : "rgba(255,255,255,0.5)",
@@ -166,11 +167,11 @@ export function Scene06System({ reduced }: { reduced: boolean }) {
                         ))}
                       </ul>
                     </motion.div>
-                    <div className="mx-auto my-[0.5vh] h-3 w-px bg-forest/20 lg:hidden" />
                   </li>
-                );
-              })}
-            </ol>
+                  );
+                })}
+              </ol>
+            </div>
 
             <motion.div
               className="mt-[2.5vh] flex justify-center lg:justify-start"

@@ -112,7 +112,7 @@ export function Scene09FinalCut({ reduced, onReplay }: Props) {
             <span className="text-parchment-dim">{FINAL_LINES.subline}</span>
           </motion.h2>
 
-          <div className="mt-[7vh] flex flex-col gap-10 sm:flex-row sm:items-end sm:justify-between">
+          <div className="mt-[7vh] flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
             <a
               href={LINKS.email}
               data-cursor="ENTER"
@@ -197,7 +197,7 @@ export function Scene09FinalCut({ reduced, onReplay }: Props) {
                   transition={{ duration: 0.6, delay: (i % 4) * 0.07, ease: EASE_OUT }}
                 >
                   <dt className="label font-bold shrink-0 text-white/40">{c.role}</dt>
-                  <dd className="truncate text-right font-display font-bold text-lg text-white">
+                  <dd className="break-words text-right font-display font-bold text-lg text-white">
                     {c.value}
                   </dd>
                 </motion.div>

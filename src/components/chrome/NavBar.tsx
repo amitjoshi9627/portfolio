@@ -29,6 +29,7 @@ export function NavBar({ activeScene, soundOn, onToggleSound }: NavBarProps) {
   const [open, setOpen] = useState(false);
   const [logoFlare, setLogoFlare] = useState(false);
   const [hoveredScene, setHoveredScene] = useState<SceneMeta | null>(null);
+  const [isMobileMenu, setIsMobileMenu] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -38,6 +39,14 @@ export function NavBar({ activeScene, soundOn, onToggleSound }: NavBarProps) {
     return () => clearTimeout(id);
   }, []);
 
+  /* Detect mobile layout on open */
+  useEffect(() => {
+    const check = () => setIsMobileMenu(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
   const isLanding = activeScene === "opening";
   const currentSceneMeta = useMemo(() => SCENES.find((s) => s.id === activeScene) || SCENES[0], [activeScene]);
   const activeHover = hoveredScene || currentSceneMeta;
@@ -45,11 +54,10 @@ export function NavBar({ activeScene, soundOn, onToggleSound }: NavBarProps) {
   // Memoize orbital layout geometry (computed once when modal opens)
   const layoutGeometry = useMemo(() => {
     if (!open || typeof window === "undefined") return { radiusX: 375, radiusY: 255 };
-    const isMobile = window.innerWidth < 768;
     const isShort = window.innerHeight < 680;
     return {
-      radiusX: isMobile ? (isShort ? 80 : 100) : (isShort ? 300 : 375),
-      radiusY: isMobile ? (isShort ? 120 : 160) : (isShort ? 190 : 255),
+      radiusX: isShort ? 300 : 375,
+      radiusY: isShort ? 190 : 255,
     };
   }, [open]);
 
@@ -139,7 +147,7 @@ export function NavBar({ activeScene, soundOn, onToggleSound }: NavBarProps) {
                 style={{ background: isLanding ? "linear-gradient(to right, rgba(255,255,255,0.7), transparent)" : "linear-gradient(to right, rgba(22,88,59,0.7), transparent)" }}
               />
             </div>
-            <span className={`label mt-1.5 block font-bold ${isLanding ? 'text-white/70' : 'text-parchment-dim'}`}>ANIMATOR&rsquo;S DESK</span>
+            <span className={`label mt-1.5 block font-bold text-[8px] sm:text-[10px] tracking-[0.1em] sm:tracking-[0.15em] ${isLanding ? 'text-white/70' : 'text-parchment-dim'}`}>ANIMATOR&rsquo;S DESK</span>
           </button>
 
           <div className="ml-auto flex items-center gap-2.5 sm:gap-3.5">
@@ -270,149 +278,229 @@ export function NavBar({ activeScene, soundOn, onToggleSound }: NavBarProps) {
                 </button>
               </div>
 
-              {/* ── CENTRAL PROJECTOR & ORBITAL CARDS ─────────────────────── */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none min-h-[500px]">
-                {/* Center Projector Lens / Preview */}
-                <motion.div
-                  className="relative z-10 flex flex-col items-center justify-center text-center p-6 max-w-xs sm:max-w-md pointer-events-none"
-                  initial={{ scale: 0.85, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.1, ease: EASE_OUT }}
-                >
-                  {/* Rotating Precision Aperture Rings */}
-                  <motion.div
-                    className="absolute -inset-12 sm:-inset-16 rounded-full border border-sunset/15 border-dashed"
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-                  />
-                  <motion.div
-                    className="absolute -inset-24 sm:-inset-28 rounded-full border border-forest/10"
-                    animate={{ rotate: -360 }}
-                    transition={{ duration: 90, repeat: Infinity, ease: "linear" }}
-                  />
-                  <div className="absolute -inset-8 rounded-full bg-gradient-to-tr from-sunset/10 to-forest/10 blur-2xl pointer-events-none" />
-
-                  {/* Active Scene Preview Details */}
-                  <div className="relative">
-                    <span className="inline-flex items-center gap-2 rounded-full border border-sunset/30 bg-sunset/10 px-3 py-1 font-mono text-[10px] font-bold tracking-[0.3em] text-sunset-glow uppercase shadow-sm">
-                      <span className="h-1.5 w-1.5 rounded-full bg-sunset animate-ping" />
-                      SCENE {activeHover.index} / 09
-                    </span>
-                    <h2 className="font-display font-bold text-2xl sm:text-4xl text-white tracking-[0.05em] mt-4 uppercase [text-shadow:0_4px_16px_rgba(0,0,0,0.8)]">
-                      {activeHover.title}
-                    </h2>
-                    <p className="font-sans text-xs sm:text-sm font-medium text-white/60 mt-3 max-w-xs leading-relaxed">
-                      {SCENE_DESCRIPTIONS[activeHover.id] || "Production Reel Section"}
-                    </p>
-                  </div>
-                </motion.div>
-
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none min-h-[500px]">
-                  {SCENES.map((item, i) => {
-                    const total = SCENES.length;
-                    const angle = (i * ((Math.PI * 2) / total)) - (Math.PI / 2);
-                    
-                    const { radiusX, radiusY } = layoutGeometry;
-                    const targetX = Math.cos(angle) * radiusX;
-                    const targetY = Math.sin(angle) * radiusY;
-
-                    const startX = targetX * 0.6;
-                    const startY = targetY * 0.6;
-
-                    const isCurrent = item.id === activeScene;
-                    const isHovered = hoveredScene?.id === item.id;
-
-                    return (
-                      <motion.button
+              {/* ── MOBILE: SCROLLABLE VERTICAL SCENE LIST ─────────────────── */}
+              {isMobileMenu ? (
+                <div className="pointer-events-auto flex-1 overflow-y-auto py-4">
+                  {/* Mobile fast-nav pills */}
+                  <div className="flex gap-2 mb-6 flex-wrap">
+                    {[
+                      { id: "director", label: "Resume" },
+                      { id: "edit", label: "Work" },
+                      { id: "system", label: "Stack" },
+                      { id: "final", label: "Contact" },
+                    ].map((item) => (
+                      <button
                         key={item.id}
                         type="button"
                         onClick={() => go(item.id)}
-                        onMouseEnter={() => setHoveredScene(item)}
-                        data-cursor="ENTER"
-                        className={`pointer-events-auto absolute group flex flex-col justify-between rounded-xl p-2.5 sm:p-4 text-left border backdrop-blur-2xl w-28 h-20 sm:w-44 sm:h-28 transition-colors duration-200 ${
-                          isHovered
-                            ? "bg-[#16201b]/95 border-sunset/60 shadow-[0_12px_36px_rgba(212,122,67,0.35)] z-30"
-                            : isCurrent
-                            ? "bg-[#111a15]/90 border-forest/50 shadow-[0_8px_24px_rgba(56,102,65,0.35)] z-20"
-                            : "bg-[#0b120e]/75 border-white/10 hover:border-white/25 hover:bg-[#121c17]/85 z-10"
-                        }`}
-                        initial={{
-                          x: startX,
-                          y: startY,
-                          opacity: 0,
-                          scale: 0.8,
-                        }}
-                        animate={{
-                          x: targetX,
-                          y: targetY,
-                          opacity: 1,
-                          scale: isHovered ? 1.08 : 1,
-                        }}
-                        whileHover={{
-                          scale: 1.08,
-                          transition: { duration: 0.2, ease: "easeOut" },
-                        }}
-                        whileTap={{ scale: 0.96 }}
-                        exit={{
-                          x: startX,
-                          y: startY,
-                          opacity: 0,
-                          scale: 0.8,
-                          transition: { duration: 0.2, ease: "easeIn" },
-                        }}
-                        transition={{
-                          x: { duration: 0.55, ease: [0.16, 1, 0.3, 1], delay: 0.02 * i },
-                          y: { duration: 0.55, ease: [0.16, 1, 0.3, 1], delay: 0.02 * i },
-                          opacity: { duration: 0.4, delay: 0.02 * i },
-                          scale: { duration: 0.2, ease: "easeOut" },
-                        }}
-                        style={{ willChange: "transform" }}
+                        className="rounded-full border border-sunset/30 bg-sunset/10 px-4 py-1.5 font-mono text-[11px] font-bold tracking-widest text-sunset-glow transition-all hover:bg-sunset/20 active:scale-95"
                       >
-                        {/* Film Registration Corner Marks */}
-                        <span className="absolute top-1.5 left-1.5 font-mono text-[7px] text-white/20 group-hover:text-sunset/40 transition-colors">
-                          +
-                        </span>
-                        <span className="absolute bottom-1.5 right-1.5 font-mono text-[7px] text-white/20 group-hover:text-sunset/40 transition-colors">
-                          +
-                        </span>
+                        {item.label.toUpperCase()}
+                      </button>
+                    ))}
+                  </div>
 
-                        {/* Top Card Bar */}
-                        <div className="flex items-center justify-between w-full pointer-events-none">
-                          <span
-                            className={`font-mono text-[10px] sm:text-[11px] font-bold tracking-widest transition-colors ${
-                              isHovered || isCurrent ? "text-sunset-glow" : "text-white/45 group-hover:text-white/80"
+                  {/* Full scene list */}
+                  <ol className="space-y-2">
+                    {SCENES.map((item, i) => {
+                      const isCurrent = item.id === activeScene;
+                      return (
+                        <motion.li
+                          key={item.id}
+                          initial={{ opacity: 0, x: -16 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.3, delay: i * 0.04, ease: EASE_OUT }}
+                        >
+                          <button
+                            type="button"
+                            onClick={() => go(item.id)}
+                            className={`group w-full flex items-center justify-between rounded-xl border p-4 text-left transition-all duration-200 active:scale-[0.98] ${
+                              isCurrent
+                                ? "bg-[#111a15]/90 border-forest/50 shadow-[0_4px_16px_rgba(56,102,65,0.3)]"
+                                : "bg-[#0b120e]/75 border-white/10 hover:border-white/25 hover:bg-[#121c17]/85"
                             }`}
                           >
-                            SCENE {item.index}
-                          </span>
-                          {isCurrent ? (
-                            <span className="flex h-2 w-2 items-center justify-center">
-                              <span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-forest-light opacity-75" />
-                              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-forest-light" />
-                            </span>
-                          ) : isHovered ? (
-                            <span className="h-1.5 w-1.5 rounded-full bg-sunset" />
-                          ) : null}
-                        </div>
-
-                        {/* Bottom Card Title & Subtitle */}
-                        <div className="pointer-events-none mt-1">
-                          <span
-                            className={`font-display font-bold text-xs sm:text-[13px] leading-tight block uppercase tracking-[0.04em] transition-colors ${
-                              isHovered || isCurrent ? "text-white" : "text-white/85 group-hover:text-white"
-                            }`}
-                          >
-                            {item.title}
-                          </span>
-                          <span className="hidden sm:block font-mono text-[8px] text-white/35 tracking-[0.1em] uppercase mt-1 truncate group-hover:text-sunset-glow/70 transition-colors">
-                            {SCENE_DESCRIPTIONS[item.id] || "Reel"}
-                          </span>
-                        </div>
-                      </motion.button>
-                    );
-                  })}
+                            <div className="flex items-center gap-4 min-w-0">
+                              <span className={`font-mono text-[11px] font-bold tracking-widest shrink-0 ${
+                                isCurrent ? "text-sunset-glow" : "text-white/40"
+                              }`}>
+                                SCENE {item.index}
+                              </span>
+                              <div className="min-w-0">
+                                <span className={`font-display font-bold text-sm leading-tight block uppercase tracking-[0.04em] ${
+                                  isCurrent ? "text-white" : "text-white/80"
+                                }`}>
+                                  {item.title}
+                                </span>
+                                <span className="font-mono text-[9px] text-white/30 tracking-[0.1em] uppercase mt-0.5 block truncate">
+                                  {SCENE_DESCRIPTIONS[item.id] || "Reel"}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2 shrink-0 ml-3">
+                              {isCurrent && (
+                                <span className="relative flex h-2 w-2">
+                                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-forest-light opacity-75" />
+                                  <span className="relative inline-flex h-2 w-2 rounded-full bg-forest-light" />
+                                </span>
+                              )}
+                              <ArrowRight size={14} className={`transition-transform group-hover:translate-x-1 ${
+                                isCurrent ? "text-forest-light" : "text-white/20 group-hover:text-white/60"
+                              }`} />
+                            </div>
+                          </button>
+                        </motion.li>
+                      );
+                    })}
+                  </ol>
                 </div>
-              </div>
+              ) : (
+                /* ── DESKTOP: ORBITAL LAYOUT ─────────────────────────────── */
+                <>
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none min-h-[500px]">
+                    {/* Center Projector Lens / Preview */}
+                    <motion.div
+                      className="relative z-10 flex flex-col items-center justify-center text-center p-6 max-w-xs sm:max-w-md pointer-events-none"
+                      initial={{ scale: 0.85, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 0.5, delay: 0.1, ease: EASE_OUT }}
+                    >
+                      {/* Rotating Precision Aperture Rings */}
+                      <motion.div
+                        className="absolute -inset-12 sm:-inset-16 rounded-full border border-sunset/15 border-dashed"
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+                      />
+                      <motion.div
+                        className="absolute -inset-24 sm:-inset-28 rounded-full border border-forest/10"
+                        animate={{ rotate: -360 }}
+                        transition={{ duration: 90, repeat: Infinity, ease: "linear" }}
+                      />
+                      <div className="absolute -inset-8 rounded-full bg-gradient-to-tr from-sunset/10 to-forest/10 blur-2xl pointer-events-none" />
+
+                      {/* Active Scene Preview Details */}
+                      <div className="relative">
+                        <span className="inline-flex items-center gap-2 rounded-full border border-sunset/30 bg-sunset/10 px-3 py-1 font-mono text-[10px] font-bold tracking-[0.3em] text-sunset-glow uppercase shadow-sm">
+                          <span className="h-1.5 w-1.5 rounded-full bg-sunset animate-ping" />
+                          SCENE {activeHover.index} / 09
+                        </span>
+                        <h2 className="font-display font-bold text-2xl sm:text-4xl text-white tracking-[0.05em] mt-4 uppercase [text-shadow:0_4px_16px_rgba(0,0,0,0.8)]">
+                          {activeHover.title}
+                        </h2>
+                        <p className="font-sans text-xs sm:text-sm font-medium text-white/60 mt-3 max-w-xs leading-relaxed">
+                          {SCENE_DESCRIPTIONS[activeHover.id] || "Production Reel Section"}
+                        </p>
+                      </div>
+                    </motion.div>
+
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none min-h-[500px]">
+                      {SCENES.map((item, i) => {
+                        const total = SCENES.length;
+                        const angle = (i * ((Math.PI * 2) / total)) - (Math.PI / 2);
+                        
+                        const { radiusX, radiusY } = layoutGeometry;
+                        const targetX = Math.cos(angle) * radiusX;
+                        const targetY = Math.sin(angle) * radiusY;
+
+                        const startX = targetX * 0.6;
+                        const startY = targetY * 0.6;
+
+                        const isCurrent = item.id === activeScene;
+                        const isHovered = hoveredScene?.id === item.id;
+
+                        return (
+                          <motion.button
+                            key={item.id}
+                            type="button"
+                            onClick={() => go(item.id)}
+                            onMouseEnter={() => setHoveredScene(item)}
+                            data-cursor="ENTER"
+                            className={`pointer-events-auto absolute group flex flex-col justify-between rounded-xl p-2.5 sm:p-4 text-left border backdrop-blur-2xl w-28 h-20 sm:w-44 sm:h-28 transition-colors duration-200 ${
+                              isHovered
+                                ? "bg-[#16201b]/95 border-sunset/60 shadow-[0_12px_36px_rgba(212,122,67,0.35)] z-30"
+                                : isCurrent
+                                ? "bg-[#111a15]/90 border-forest/50 shadow-[0_8px_24px_rgba(56,102,65,0.35)] z-20"
+                                : "bg-[#0b120e]/75 border-white/10 hover:border-white/25 hover:bg-[#121c17]/85 z-10"
+                            }`}
+                            initial={{
+                              x: startX,
+                              y: startY,
+                              opacity: 0,
+                              scale: 0.8,
+                            }}
+                            animate={{
+                              x: targetX,
+                              y: targetY,
+                              opacity: 1,
+                              scale: isHovered ? 1.08 : 1,
+                            }}
+                            whileHover={{
+                              scale: 1.08,
+                              transition: { duration: 0.2, ease: "easeOut" },
+                            }}
+                            whileTap={{ scale: 0.96 }}
+                            exit={{
+                              x: startX,
+                              y: startY,
+                              opacity: 0,
+                              scale: 0.8,
+                              transition: { duration: 0.2, ease: "easeIn" },
+                            }}
+                            transition={{
+                              x: { duration: 0.55, ease: [0.16, 1, 0.3, 1], delay: 0.02 * i },
+                              y: { duration: 0.55, ease: [0.16, 1, 0.3, 1], delay: 0.02 * i },
+                              opacity: { duration: 0.4, delay: 0.02 * i },
+                              scale: { duration: 0.2, ease: "easeOut" },
+                            }}
+                            style={{ willChange: "transform" }}
+                          >
+                            {/* Film Registration Corner Marks */}
+                            <span className="absolute top-1.5 left-1.5 font-mono text-[7px] text-white/20 group-hover:text-sunset/40 transition-colors">
+                              +
+                            </span>
+                            <span className="absolute bottom-1.5 right-1.5 font-mono text-[7px] text-white/20 group-hover:text-sunset/40 transition-colors">
+                              +
+                            </span>
+
+                            {/* Top Card Bar */}
+                            <div className="flex items-center justify-between w-full pointer-events-none">
+                              <span
+                                className={`font-mono text-[10px] sm:text-[11px] font-bold tracking-widest transition-colors ${
+                                  isHovered || isCurrent ? "text-sunset-glow" : "text-white/45 group-hover:text-white/80"
+                                }`}
+                              >
+                                SCENE {item.index}
+                              </span>
+                              {isCurrent ? (
+                                <span className="flex h-2 w-2 items-center justify-center">
+                                  <span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-forest-light opacity-75" />
+                                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-forest-light" />
+                                </span>
+                              ) : isHovered ? (
+                                <span className="h-1.5 w-1.5 rounded-full bg-sunset" />
+                              ) : null}
+                            </div>
+
+                            {/* Bottom Card Title & Subtitle */}
+                            <div className="pointer-events-none mt-1">
+                              <span
+                                className={`font-display font-bold text-xs sm:text-[13px] leading-tight block uppercase tracking-[0.04em] transition-colors ${
+                                  isHovered || isCurrent ? "text-white" : "text-white/85 group-hover:text-white"
+                                }`}
+                              >
+                                {item.title}
+                              </span>
+                              <span className="hidden sm:block font-mono text-[8px] text-white/35 tracking-[0.1em] uppercase mt-1 truncate group-hover:text-sunset-glow/70 transition-colors">
+                                {SCENE_DESCRIPTIONS[item.id] || "Reel"}
+                              </span>
+                            </div>
+                          </motion.button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </>
+              )}
 
               {/* Bottom Footer Info Bar with Fast Jumps */}
               <div className="flex shrink-0 items-center justify-between border-t border-white/10 pt-4 pointer-events-auto z-20">

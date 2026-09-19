@@ -18,6 +18,7 @@ function SetSketch() {
   return (
     <motion.svg
       viewBox="0 0 820 300"
+      preserveAspectRatio="xMidYMid meet"
       className="h-auto w-full"
       fill="none"
       initial="hidden"
@@ -100,7 +101,7 @@ export function Scene07BehindTheScenes() {
               with the sunlight pouring in.
             </motion.h2>
 
-            <div className="mt-[4vh] rounded-xl border-2 border-forest/10 bg-white/60 p-4 shadow-sm sm:p-6 paper-texture">
+            <div className="mt-[4vh] rounded-xl border-2 border-forest/10 bg-white/60 p-4 shadow-sm sm:p-6 paper-texture overflow-hidden min-w-0">
               <SetSketch />
             </div>
 
