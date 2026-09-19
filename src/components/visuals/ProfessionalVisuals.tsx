@@ -184,7 +184,7 @@ export function LumaVisual({ active, reduced, rewind }: VisualProps) {
       {/* Main Content: Workspace + Pipeline */}
       <div className="flex flex-1 min-h-0 flex-col sm:flex-row gap-2.5 sm:gap-3.5">
         {/* Workspace Card */}
-        <div className="flex-[3] min-w-0 relative flex flex-col justify-between rounded-lg border border-paper/15 bg-white/5 p-2.5 sm:p-3.5 overflow-hidden">
+        <div className="flex-[3] min-w-0 relative flex flex-col justify-between rounded-lg border border-paper/15 bg-white/5 p-2.5 sm:p-3.5 overflow-hidden h-[180px] sm:h-auto shrink-0 sm:shrink">
           {/* 01 ASK & 02 UNDERSTAND */}
           <div className="flex flex-col gap-1 sm:gap-1.5 shrink-0">
             <div className="flex items-center justify-between">
@@ -249,7 +249,7 @@ export function LumaVisual({ active, reduced, rewind }: VisualProps) {
                           animate={{ opacity: 1, x: 0 }} 
                           className="text-sunset text-[16px] sm:text-[18px] font-display font-bold leading-none mt-0.5"
                         >
-                          -18% YoY
+                          -12.4%
                         </motion.div>
                       )}
                     </div>
@@ -323,11 +323,11 @@ export function LumaVisual({ active, reduced, rewind }: VisualProps) {
         </div>
 
         {/* Pipeline Column */}
-        <div className="flex-[2] min-w-0 flex flex-col justify-between py-0.5">
+        <div className="flex-[2] min-w-0 flex flex-row overflow-x-auto sm:overflow-visible sm:flex-col sm:justify-between py-1 pb-3 sm:pb-1 snap-x snap-mandatory gap-2 sm:gap-0 hide-scrollbar" style={{ scrollbarWidth: 'none' }}>
           {LUMA_STEPS.map((s, i) => (
-            <div key={s.label} className="flex flex-col">
+            <div key={s.label} className="flex flex-col shrink-0 w-[160px] sm:w-auto snap-center">
               <div
-                className={`relative min-w-0 border px-2 py-1 sm:px-2.5 sm:py-1.5 transition-all duration-300 rounded ${
+                className={`relative min-w-0 border px-2 py-1.5 sm:px-2.5 sm:py-1.5 transition-all duration-300 rounded flex flex-col justify-center h-full sm:h-auto ${
                   step >= i + 1
                     ? "border-[#7C95A6]/70 bg-[#7C95A6]/15 shadow-sm"
                     : "border-paper/10 bg-transparent"
@@ -344,7 +344,7 @@ export function LumaVisual({ active, reduced, rewind }: VisualProps) {
                 </div>
               </div>
               {i < LUMA_STEPS.length - 1 ? (
-                <div className="flex justify-center py-0.5">
+                <div className="hidden sm:flex justify-center py-0.5">
                   <div
                     className="w-[1.5px] h-1.5 transition-colors duration-300"
                     style={{
@@ -395,10 +395,11 @@ export function SpoolVisual({ active, reduced, rewind }: VisualProps) {
       </div>
 
       {/* Main Content: Workspace + Pipeline */}
+      {/* Main Content: Workspace + Pipeline */}
       <div className="flex flex-1 min-h-0 flex-col sm:flex-row gap-2.5 sm:gap-3.5">
         
         {/* Workspace Card (Mockup) */}
-        <div className="flex-[3] min-w-0 relative">
+        <div className="flex-[3] min-w-0 relative h-[180px] sm:h-auto shrink-0 sm:shrink">
           <AnimatePresence mode="wait">
             {step < 5 ? (
               <motion.div
@@ -503,21 +504,21 @@ export function SpoolVisual({ active, reduced, rewind }: VisualProps) {
         </div>
 
         {/* Pipeline Column */}
-        <div className="flex-[2] min-w-0 flex flex-col justify-between py-0.5">
+        <div className="flex-[2] min-w-0 flex flex-row overflow-x-auto sm:overflow-visible sm:flex-col sm:justify-between py-1 pb-3 sm:pb-1 snap-x snap-mandatory gap-2 sm:gap-0 hide-scrollbar" style={{ scrollbarWidth: 'none' }}>
           {SPOOL_STEPS.map((s, i) => {
             const isHuman = s.label === "REVIEW";
             const isActive = step >= i + 1;
             return (
-              <div key={s.label} className="flex flex-col">
+              <div key={s.label} className="flex flex-col shrink-0 w-[160px] sm:w-auto snap-center">
                 <div
-                  className={`relative min-w-0 border px-1.5 py-[3px] sm:px-2 sm:py-1 transition-all duration-300 rounded ${
+                  className={`relative min-w-0 border px-2 py-1.5 sm:px-2 sm:py-1 transition-all duration-300 rounded flex flex-col justify-center h-full sm:h-auto ${
                     isActive
                       ? (isHuman ? "border-sunset/70 bg-sunset/15 shadow-sm" : "border-[#6B7F5E]/70 bg-[#6B7F5E]/15 shadow-sm")
                       : "border-paper/10 bg-transparent"
                   }`}
                 >
                   <div
-                    className="label text-[8.5px] sm:text-[9px] font-bold tracking-wider transition-colors duration-300"
+                    className="label text-[9px] sm:text-[9px] font-bold tracking-wider transition-colors duration-300"
                     style={{ color: isActive ? (isHuman ? "#D9822B" : "#6B7F5E") : "rgba(245,241,232,0.4)" }}
                   >
                     {s.label}
