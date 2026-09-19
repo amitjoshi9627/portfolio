@@ -746,8 +746,8 @@ function Lightbox({ slot, onClose }: { slot: MediaSlot | null; onClose: () => vo
             {/* Clean title overlay */}
             {slot.caption && (
               <figcaption className="absolute top-6 inset-x-0 flex justify-center pointer-events-none">
-                <div className="rounded-full border border-white/20 bg-black/40 px-8 py-2.5 backdrop-blur-md shadow-lg">
-                  <h3 className="font-display font-bold tracking-wide text-[clamp(1.2rem,2.5vmin,1.6rem)] text-white/95">
+                <div className="rounded-full border border-white/20 bg-black/40 px-5 py-1.5 backdrop-blur-md shadow-lg">
+                  <h3 className="font-display font-bold tracking-wide text-[clamp(0.9rem,2vmin,1.2rem)] text-white/95">
                     {slot.caption}
                   </h3>
                 </div>
