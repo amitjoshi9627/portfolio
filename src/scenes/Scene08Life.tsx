@@ -221,7 +221,24 @@ function ChapterPhotography({
   const heroScale = useTransform(scrollYProgress, [0, 0.5], reduced ? [1, 1] : [1.22, 1]);
   const heroBright = useTransform(scrollYProgress, [0, 0.45], [0.8, 1.1]);
   const heroFilter = useTransform(heroBright, (b) => `brightness(${b}) saturate(${0.4 + b * 0.6})`);
-  const stripX = useTransform(scrollYProgress, [0.25, 1], reduced ? ["0%", "0%"] : ["6%", "-34%"]);
+  const stripX = useTransform(scrollYProgress, (v: any) => {
+    if (reduced) return "0px";
+    const val = v as number;
+    const p = Math.max(0, Math.min(1, (val - 0.25) / 0.75));
+    if (typeof window === 'undefined') return "0px";
+    
+    const isMobile = window.innerWidth < 768;
+    const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+    const itemVw = isMobile ? 45 : (isTablet ? 22 : 16);
+    const gapPx = 16;
+    const itemPx = (itemVw / 100) * window.innerWidth;
+    
+    const totalWidth = PHOTO_FRAMES.length * itemPx + (PHOTO_FRAMES.length - 1) * gapPx;
+    const startX = (window.innerWidth / 2) - (itemPx / 2) - 16;
+    const endX = (window.innerWidth / 2) - totalWidth + (itemPx / 2) + 16;
+    
+    return `${startX + p * (endX - startX)}px`;
+  });
 
   /* Focus ring trailing the cursor. */
   const mx = useMotionValue(-999);
@@ -273,8 +290,8 @@ function ChapterPhotography({
               <span key={i} className="border border-parchment-mist/20" />
             ))}
           </div>
-          <span className="label font-bold absolute -top-5 left-0 text-parchment-dim drop-shadow-xs">f/1.8 · 1/250</span>
-          <span className="label font-bold absolute -top-5 right-0 text-clay">● REC</span>
+          <span className="label font-bold absolute top-2 left-3 sm:-top-5 sm:left-0 text-parchment-dim drop-shadow-xs">f/1.8 · 1/250</span>
+          <span className="label font-bold absolute top-2 right-3 sm:-top-5 sm:right-0 text-clay">● REC</span>
         </div>
 
         {/* focus ring */}
@@ -297,7 +314,7 @@ function ChapterPhotography({
           </motion.div>
         ) : null}
 
-        <div className="absolute inset-x-0 top-[12svh] px-4 sm:px-8">
+        <div className="absolute inset-x-0 top-[18svh] sm:top-[12svh] px-4 sm:px-8">
           <ChapterHead {...chapter} statement={chapter.statement} className="mx-auto max-w-6xl" />
         </div>
 
@@ -326,7 +343,9 @@ function PhotoFrameItem({ slot, i, scrollYProgress, onOpen, total }: { slot: any
     const val = v as number;
     const dist = Math.abs(val - peak);
     if (dist >= 0.18) return 0.8;
-    return 1.4 - (0.6 * (dist / 0.18));
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    const maxScale = isMobile ? 1.25 : 1.4;
+    return maxScale - ((maxScale - 0.8) * (dist / 0.18));
   });
 
   const opacity = useTransform(scrollYProgress, (v: any) => {
@@ -347,7 +366,7 @@ function PhotoFrameItem({ slot, i, scrollYProgress, onOpen, total }: { slot: any
 
   return (
     <motion.li 
-      className="w-[65vw] shrink-0 sm:w-[22vw] lg:w-[16vw] origin-center"
+      className="w-[45vw] shrink-0 sm:w-[22vw] lg:w-[16vw] origin-center"
       style={{ scale, opacity, zIndex, filter }}
     >
       <div className="aspect-[4/3] w-full rounded-md shadow-2xl p-1.5 bg-white transition-shadow duration-500 hover:shadow-3xl">
